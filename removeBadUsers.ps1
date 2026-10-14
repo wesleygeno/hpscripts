@@ -1,1 +1,1 @@
-get-localuser | where-object name -ne "Administrator" | remove-localuser -name $_.name
+get-localuser | where-object name -ne "Administrator" | remove-localuser -name $_.Name
