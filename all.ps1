@@ -9,6 +9,8 @@ new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -p
 
 secedit /export /cfg c:\secpol.cfg | out-null
 (Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 1","PasswordComplexity = 0" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditLogonEvents = 0","AuditLogonEvents = 3" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditSystemEvents = 0","AuditSystemEvents = 3" | Out-File c:\secpol.cfg
 secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY | out-null
 Remove-Item c:\secpol.cfg -Force
 "disabled the password complexity requirements"
