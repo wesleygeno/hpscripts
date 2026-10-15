@@ -7,11 +7,10 @@ disable-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
 "disabled all firewall rules, except added RDP rule"
 
-$cfgPath = "$env:TEMP\secpolicy.cfg"
-secedit /export /cfg $cfgPath /areas SECURITYPOLICY
-$content = Get-Content $cfgPath
-$content = $content -replace "PasswordComplexity = 1", "PasswordComplexity = 0"
-Set-Content -Path $cfgPath -Value $content -Encoding UTF8
+secedit /export /cfg c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 0","PasswordComplexity = 1" | Out-File c:\secpol.cfg
+secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+Remove-Item c:\secpol.cfg -Force
 "it's time to change your password"
 do {
     $NewPassword = Read-Host -Prompt "enter new local password" -AsSecureString
