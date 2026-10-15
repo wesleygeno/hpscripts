@@ -3,7 +3,7 @@ get-localuser | where-object name -ne "Administrator" | where-object name -ne "j
 "disabled all accounts excepts jmoney and plinktern"
 
 "disabling firewall rules..."
-disable-netfirewallrule
+remove-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
 "disabled all firewall rules, except added RDP rule"
 
