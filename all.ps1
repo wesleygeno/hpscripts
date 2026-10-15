@@ -8,7 +8,7 @@ new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -p
 "disabled all firewall rules, except added RDP rule"
 
 secedit /export /cfg c:\secpol.cfg
-(Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 0","PasswordComplexity = 1" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 1","PasswordComplexity = 0" | Out-File c:\secpol.cfg
 secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
 Remove-Item c:\secpol.cfg -Force
 "it's time to change your password"
@@ -28,5 +28,9 @@ do {
         "passwords don't match, try again"
     }
 } while (-not $PasswordsMatch)
+
+
+
+
 Set-LocalUser -Name "plinktern" -Password $NewPassword
 "updated plinktern's password"
