@@ -7,6 +7,9 @@ disable-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
 "disabled all firewall rules, except added RDP rule"
 
+$content = Get-Content $cfgPath
+$content = $content -replace "PasswordComplexity = 1", "PasswordComplexity = 0"
+Set-Content -Path $cfgPath -Value $content -Encoding UTF8
 "it's time to change your password"
 do {
     $NewPassword = Read-Host -Prompt "enter new local password" -AsSecureString
