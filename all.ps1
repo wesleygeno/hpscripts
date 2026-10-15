@@ -7,10 +7,11 @@ disable-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
 "disabled all firewall rules, except added RDP rule"
 
-secedit /export /cfg c:\secpol.cfg
+secedit /export /cfg c:\secpol.cfg | out-null
 (Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 1","PasswordComplexity = 0" | Out-File c:\secpol.cfg
-secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY | out-null
 Remove-Item c:\secpol.cfg -Force
+"disabled the password complexity requirements"
 "it's time to change your password"
 do {
     $NewPassword = Read-Host -Prompt "enter new local password" -AsSecureString
