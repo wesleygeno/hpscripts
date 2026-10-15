@@ -7,6 +7,8 @@ disable-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
 "disabled all firewall rules, except added RDP rule"
 
+$cfgPath = "$env:TEMP\secpolicy.cfg"
+secedit /export /cfg $cfgPath /areas SECURITYPOLICY
 $content = Get-Content $cfgPath
 $content = $content -replace "PasswordComplexity = 1", "PasswordComplexity = 0"
 Set-Content -Path $cfgPath -Value $content -Encoding UTF8
