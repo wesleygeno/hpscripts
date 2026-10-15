@@ -1,3 +1,3 @@
-get-localuser | where-object name -ne "Administrator" | foreach-object { disable-localuser -name $_.name }
+get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name }
 disable-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389
