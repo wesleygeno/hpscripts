@@ -2,13 +2,6 @@
 get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name }
 "disabled all accounts excepts jmoney and plinktern"
 
-"disabling firewall rules..."
-remove-netfirewallrule
-new-netfirewallrule -displayname "Allow RDP (TCP)" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
-new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
-new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
-"disabled all firewall rules, except adde RDP rule"
-
 secedit /export /cfg c:\secpol.cfg | out-null
 (Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 1","PasswordComplexity = 0" | Out-File c:\secpol.cfg
 (Get-Content c:\secpol.cfg) -Replace "AuditLogonEvents = 0","AuditLogonEvents = 3" | Out-File c:\secpol.cfg
@@ -21,7 +14,8 @@ secedit /export /cfg c:\secpol.cfg | out-null
 secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY | out-null
 Remove-Item c:\secpol.cfg -Force
 "disabled the password complexity requirements"
-"it's time to change your password"
+
+"it's time to change the plinktern password"
 do {
     $NewPassword = Read-Host -Prompt "enter new local password" -AsSecureString
     $ConfirmPassword = Read-Host -Prompt "confirm new local password" -AsSecureString
@@ -39,8 +33,13 @@ do {
     }
 } while (-not $PasswordsMatch)
 
-
-
+"disabling firewall rules..."
+remove-netfirewallrule
+new-netfirewallrule -displayname "Allow RDP (TCP)" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
+new-netfirewallrule -displayname "Allow RDP (UDP)" -direction inbound -action allow -protocol udp -localport 3389 | out-null
+new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
+new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
+"disabled all firewall rules, except adde RDP rule"
 
 Set-LocalUser -Name "plinktern" -Password $NewPassword
 "updated plinktern's password"
