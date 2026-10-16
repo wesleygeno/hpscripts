@@ -32,6 +32,28 @@ do {
         "passwords don't match, try again"
     }
 } while (-not $PasswordsMatch)
+Set-LocalUser -Name "plinktern" -Password $NewPassword
+"updated plinktern's password"
+
+"it's time to change the jmoney password"
+do {
+    $NewPassword = Read-Host -Prompt "enter new local password" -AsSecureString
+    $ConfirmPassword = Read-Host -Prompt "confirm new local password" -AsSecureString
+    
+    $BSTR1 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($NewPassword)
+    $Plain1 = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR1)
+    
+    $BSTR2 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($ConfirmPassword)
+    $Plain2 = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR2)
+    
+    $PasswordsMatch = ($Plain1 -eq $Plain2)
+    
+    if (-not $PasswordsMatch) {
+        "passwords don't match, try again"
+    }
+} while (-not $PasswordsMatch)
+Set-LocalUser -Name "jmoney" -Password $NewPassword
+"updated jmoney's password"
 
 "disabling firewall rules..."
 remove-netfirewallrule
@@ -39,7 +61,4 @@ new-netfirewallrule -displayname "Allow RDP (TCP)" -direction inbound -action al
 new-netfirewallrule -displayname "Allow RDP (UDP)" -direction inbound -action allow -protocol udp -localport 3389 | out-null
 new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
 new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
-"disabled all firewall rules, except adde RDP rule"
-
-Set-LocalUser -Name "plinktern" -Password $NewPassword
-"updated plinktern's password"
+"disabled all firewall rules, except added RDP rule"
