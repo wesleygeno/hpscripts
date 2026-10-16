@@ -5,11 +5,18 @@ get-localuser | where-object name -ne "Administrator" | where-object name -ne "j
 "disabling firewall rules..."
 remove-netfirewallrule
 new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
-"disabled all firewall rules, except added RDP rule"
+new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
+new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
+"disabled all firewall rules, except adde RDP rule"
 
 secedit /export /cfg c:\secpol.cfg | out-null
 (Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 1","PasswordComplexity = 0" | Out-File c:\secpol.cfg
 (Get-Content c:\secpol.cfg) -Replace "AuditLogonEvents = 0","AuditLogonEvents = 3" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditLogonEvents = 1","AuditLogonEvents = 3" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditLogonEvents = 2","AuditLogonEvents = 3" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditSystemEvents = 0","AuditSystemEvents = 3" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditSystemEvents = 1","AuditSystemEvents = 3" | Out-File c:\secpol.cfg
+(Get-Content c:\secpol.cfg) -Replace "AuditSystemEvents = 2","AuditSystemEvents = 3" | Out-File c:\secpol.cfg
 (Get-Content c:\secpol.cfg) -Replace "AuditSystemEvents = 0","AuditSystemEvents = 3" | Out-File c:\secpol.cfg
 secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY | out-null
 Remove-Item c:\secpol.cfg -Force
