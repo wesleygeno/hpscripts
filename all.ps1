@@ -4,7 +4,7 @@ get-localuser | where-object name -ne "Administrator" | where-object name -ne "j
 
 "disabling firewall rules..."
 remove-netfirewallrule
-new-netfirewallrule -displayname "Allow RDP" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
+new-netfirewallrule -displayname "Allow RDP (TCP)" -direction inbound -action allow -protocol tcp -localport 3389 | out-null
 new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
 new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
 "disabled all firewall rules, except adde RDP rule"
