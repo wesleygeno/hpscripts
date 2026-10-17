@@ -3,6 +3,7 @@ get-localuser | where-object name -ne "Administrator" | where-object name -ne "j
 "disabled all accounts excepts jmoney and plinktern"
 get-localgroupmember -name "Administrators" | where-object name -notlike "*\Administrator" | foreach-object { remove-localgroupmember -name "Administrators" -member $_.name }
 add-localgroupmember -name "Administrators" -member "plinktern"
+add-localgroupmember -name "Remote Desktop Users" -member "jmoney"
 "deprivileged all accounts except plinktern"
 
 secedit /export /cfg c:\secpol.cfg | out-null
