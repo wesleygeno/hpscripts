@@ -1,6 +1,8 @@
 "disabling accounts..."
-get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name; Remove-LocalGroupMember -Group "Administrators" -Member $_.name }
+get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name }
 "disabled all accounts excepts jmoney and plinktern"
+get-localusergroup -name "Administrators" | foreach-object { remove-localusergroup -name "Administrators" -member $_.name }
+add-localusergroup -name "Administrators" -member "plinktern
 "deprivileged all accounts except plinktern"
 
 secedit /export /cfg c:\secpol.cfg | out-null
