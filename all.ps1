@@ -66,5 +66,5 @@ new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action a
 new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
 "disabled all firewall rules, except added RDP rule"
 
-read-host -prompt "press enter to log out all users!!!"
-quser | Select-Object -Skip 1 | ForEach-Object { logoff ($_ -split ' +')[-6] }
+read-host -prompt "press enter to log out all other users!!!"
+quser | Select-Object -Skip 1 | ForEach-Object { if (($_ -split ' +')[1] -ne "plinktern") { logoff ($_ -split ' +')[-6] } }
