@@ -1,6 +1,7 @@
 "disabling accounts..."
-get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name }
+get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name; Remove-LocalGroupMember -Group "Administrators" -Member $_.name }
 "disabled all accounts excepts jmoney and plinktern"
+"deprivileged all accounts except plinktern"
 
 secedit /export /cfg c:\secpol.cfg | out-null
 (Get-Content c:\secpol.cfg) -Replace "PasswordComplexity = 1","PasswordComplexity = 0" | Out-File c:\secpol.cfg
