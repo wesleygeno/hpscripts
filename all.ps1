@@ -1,7 +1,7 @@
 "disabling accounts..."
 get-localuser | where-object name -ne "Administrator" | where-object name -ne "jmoney" | where-object name -ne "plinktern" | foreach-object { disable-localuser -name $_.name }
 "disabled all accounts excepts jmoney and plinktern"
-get-localgroupmember -name "Administrators" | foreach-object { remove-localgroupmember -name "Administrators" -member $_.name }
+get-localgroupmember -name "Administrators" | where-object name -ne "Administrator" | foreach-object { remove-localgroupmember -name "Administrators" -member $_.name }
 add-localgroupmember -name "Administrators" -member "plinktern"
 "deprivileged all accounts except plinktern"
 
