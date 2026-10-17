@@ -66,6 +66,7 @@ new-netfirewallrule -displayname "Allow RDP (TCP)" -direction inbound -action al
 new-netfirewallrule -displayname "Allow RDP (UDP)" -direction inbound -action allow -protocol udp -localport 3389 | out-null
 new-netfirewallrule -displayname "Allow Web Server" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
 new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
+Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultOutboundAction Block | Out-Null
 "disabled all firewall rules, except added RDP rule"
 
 read-host -prompt "press enter to log out all other users!!!"
