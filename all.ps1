@@ -68,6 +68,7 @@ new-netfirewallrule -displayname "Allow HTTPS" -direction outbound -action allow
 new-netfirewallrule -displayname "Allow MariaDB Requests" -direction inbound -action allow -protocol tcp -localport 3306 | out-null
 new-netfirewallrule -displayname "Allow Jenkins Requests" -direction inbound -action allow -protocol tcp -localport 8080 | out-null
 Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultOutboundAction Block | Out-Null
+Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultinboundAction Block | Out-Null
 "disabled all firewall rules, except added RDP rule"
 
 read-host -prompt "press enter to log out all other users!!!"
