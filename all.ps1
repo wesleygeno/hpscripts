@@ -20,6 +20,7 @@ secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas S
 Remove-Item c:\secpol.cfg -Force
 "disabled the password complexity requirements"
 
+<#
 "it's time to change the plinktern password"
 do {
     $NewPassword = Read-Host -Prompt "enter new local password" -AsSecureString
@@ -59,6 +60,7 @@ do {
 } while (-not $PasswordsMatch)
 Set-LocalUser -Name "jmoney" -Password $NewPassword
 "updated jmoney's password"
+#>
 
 "disabling firewall rules..."
 remove-netfirewallrule
